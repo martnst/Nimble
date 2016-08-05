@@ -2,8 +2,8 @@ import Foundation
 import XCTest
 import Nimble
 
-class EqualTest: XCTestCase, XCTestCaseProvider {
-    var allTests: [(String, () throws -> Void)] {
+final class EqualTest: XCTestCase, XCTestCaseProvider {
+    static var allTests: [(String, (EqualTest) -> () throws -> Void)] {
         return [
             ("testEquality", testEquality),
             ("testArrayEquality", testArrayEquality),
@@ -140,9 +140,9 @@ class EqualTest: XCTestCase, XCTestCaseProvider {
     }
 
     func testDataEquality() {
-        let actual = "foobar".dataUsingEncoding(NSUTF8StringEncoding)
-        let expected = "foobar".dataUsingEncoding(NSUTF8StringEncoding)
-        let unexpected = "foobarfoo".dataUsingEncoding(NSUTF8StringEncoding)
+        let actual = "foobar".data(using: String.Encoding.utf8)
+        let expected = "foobar".data(using: String.Encoding.utf8)
+        let unexpected = "foobarfoo".data(using: String.Encoding.utf8)
 
         expect(actual).to(equal(expected))
         expect(actual).toNot(equal(unexpected))
@@ -161,10 +161,10 @@ class EqualTest: XCTestCase, XCTestCaseProvider {
     }
 
     func testNSObjectEquality() {
-        expect(NSNumber(integer:1)).to(equal(NSNumber(integer:1)))
-        expect(NSNumber(integer:1)) == NSNumber(integer:1)
-        expect(NSNumber(integer:1)) != NSNumber(integer:2)
-        expect { NSNumber(integer:1) }.to(equal(1))
+        expect(NSNumber(value:1)).to(equal(NSNumber(value:1)))
+        expect(NSNumber(value:1)) == NSNumber(value:1)
+        expect(NSNumber(value:1)) != NSNumber(value:2)
+        expect { NSNumber(value:1) }.to(equal(1))
     }
 
     func testOperatorEquality() {

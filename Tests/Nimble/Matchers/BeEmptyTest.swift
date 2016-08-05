@@ -2,8 +2,8 @@ import Foundation
 import XCTest
 import Nimble
 
-class BeEmptyTest: XCTestCase, XCTestCaseProvider {
-    var allTests: [(String, () throws -> Void)] {
+final class BeEmptyTest: XCTestCase, XCTestCaseProvider {
+    static var allTests: [(String, (BeEmptyTest) -> () throws -> Void)] {
         return [
             ("testBeEmptyPositive", testBeEmptyPositive),
             ("testBeEmptyNegative", testBeEmptyNegative),
@@ -31,10 +31,10 @@ class BeEmptyTest: XCTestCase, XCTestCaseProvider {
 #endif
 
         expect(NSSet()).to(beEmpty())
-        expect(NSSet(array: [NSNumber(integer: 1)])).toNot(beEmpty())
+        expect(NSSet(array: [NSNumber(value: 1)])).toNot(beEmpty())
 
-        expect(NSIndexSet()).to(beEmpty())
-        expect(NSIndexSet(index: 1)).toNot(beEmpty())
+        expect(IndexSet()).to(beEmpty())
+        expect(IndexSet(integer: 1)).toNot(beEmpty())
 
         expect(NSString()).to(beEmpty())
         expect(NSString(string: "hello")).toNot(beEmpty())
@@ -62,14 +62,14 @@ class BeEmptyTest: XCTestCase, XCTestCaseProvider {
             expect(NSSet()).toNot(beEmpty());
         }
         failsWithErrorMessage("expected to be empty, got <{(1)}>") {
-            expect(NSSet(object: NSNumber(int: 1))).to(beEmpty());
+            expect(NSSet(object: NSNumber(value: 1))).to(beEmpty());
         }
 
         failsWithErrorMessage("expected to not be empty, got <()>") {
-            expect(NSIndexSet()).toNot(beEmpty());
+            expect(IndexSet()).toNot(beEmpty());
         }
         failsWithErrorMessage("expected to be empty, got <(1)>") {
-            expect(NSIndexSet(index: 1)).to(beEmpty());
+            expect(IndexSet(integer: 1)).to(beEmpty());
         }
 
         failsWithErrorMessage("expected to not be empty, got <>") {

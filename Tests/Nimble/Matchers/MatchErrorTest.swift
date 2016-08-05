@@ -2,8 +2,8 @@ import Foundation
 import XCTest
 import Nimble
 
-class MatchErrorTest: XCTestCase, XCTestCaseProvider {
-    var allTests: [(String, () throws -> Void)] {
+final class MatchErrorTest: XCTestCase, XCTestCaseProvider {
+    static var allTests: [(String, (MatchErrorTest) -> () throws -> Void)] {
         return [
             ("testMatchErrorPositive", testMatchErrorPositive),
             ("testMatchErrorNegative", testMatchErrorNegative),
@@ -16,16 +16,16 @@ class MatchErrorTest: XCTestCase, XCTestCaseProvider {
     }
 
     func testMatchErrorPositive() {
-        expect(Error.Laugh).to(matchError(Error.Laugh))
-        expect(Error.Laugh).to(matchError(Error.self))
-        expect(EquatableError.Parameterized(x: 1)).to(matchError(EquatableError.Parameterized(x: 1)))
+        expect(NimbleError.laugh).to(matchError(NimbleError.laugh))
+        expect(NimbleError.laugh).to(matchError(NimbleError.self))
+        expect(EquatableError.parameterized(x: 1)).to(matchError(EquatableError.parameterized(x: 1)))
 
-        expect(Error.Laugh as ErrorType).to(matchError(Error.Laugh))
+        expect(NimbleError.laugh as Error).to(matchError(NimbleError.laugh))
     }
 
     func testMatchErrorNegative() {
-        expect(Error.Laugh).toNot(matchError(Error.Cry))
-        expect(Error.Laugh as ErrorType).toNot(matchError(Error.Cry))
+        expect(NimbleError.laugh).toNot(matchError(NimbleError.cry))
+        expect(NimbleError.laugh as Error).toNot(matchError(NimbleError.cry))
     }
 
     func testMatchNSErrorPositive() {
@@ -44,13 +44,13 @@ class MatchErrorTest: XCTestCase, XCTestCaseProvider {
 
     func testMatchPositiveMessage() {
         failsWithErrorMessage("expected to match error <Parameterized(2)>, got <Parameterized(1)>") {
-            expect(EquatableError.Parameterized(x: 1)).to(matchError(EquatableError.Parameterized(x: 2)))
+            expect(EquatableError.parameterized(x: 1)).to(matchError(EquatableError.parameterized(x: 2)))
         }
         failsWithErrorMessage("expected to match error <Cry>, got <Laugh>") {
-            expect(Error.Laugh).to(matchError(Error.Cry))
+            expect(NimbleError.laugh).to(matchError(NimbleError.cry))
         }
         failsWithErrorMessage("expected to match error <code=1>, got <code=0>") {
-            expect(CustomDebugStringConvertibleError.A).to(matchError(CustomDebugStringConvertibleError.B))
+            expect(CustomDebugStringConvertibleError.a).to(matchError(CustomDebugStringConvertibleError.b))
         }
 
         failsWithErrorMessage("expected to match error <Error Domain=err Code=1 \"(null)\">, got <Error Domain=err Code=0 \"(null)\">") {
@@ -62,17 +62,17 @@ class MatchErrorTest: XCTestCase, XCTestCaseProvider {
 
     func testMatchNegativeMessage() {
         failsWithErrorMessage("expected to not match error <Laugh>, got <Laugh>") {
-            expect(Error.Laugh).toNot(matchError(Error.Laugh))
+            expect(NimbleError.laugh).toNot(matchError(NimbleError.laugh))
         }
     }
 
     func testDoesNotMatchNils() {
         failsWithErrorMessageForNil("expected to match error <Laugh>, got no error") {
-            expect(nil as ErrorType?).to(matchError(Error.Laugh))
+            expect(nil as Error?).to(matchError(NimbleError.laugh))
         }
 
         failsWithErrorMessageForNil("expected to not match error <Laugh>, got no error") {
-            expect(nil as ErrorType?).toNot(matchError(Error.Laugh))
+            expect(nil as Error?).toNot(matchError(NimbleError.laugh))
         }
     }
 }
