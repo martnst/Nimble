@@ -1,12 +1,14 @@
 import Foundation
 
-public func allPass<T,U where U: Sequence, U.Iterator.Element == T>
-    (_ passFunc: (T?) -> Bool) -> NonNilMatcherFunc<U> {
-        return allPass("pass a condition", passFunc)
+public func allPass<T,U>
+  (_ passFunc: @escaping (T?) -> Bool) -> NonNilMatcherFunc<U>
+  where U: Sequence, U.Iterator.Element == T
+{
+  return allPass("pass a condition", passFunc)
 }
 
-public func allPass<T,U where U: Sequence, U.Iterator.Element == T>
-    (_ passName: String, _ passFunc: (T?) -> Bool) -> NonNilMatcherFunc<U> {
+public func allPass<T,U>
+  (_ passName: String, _ passFunc: @escaping (T?) -> Bool) -> NonNilMatcherFunc<U> where U: Sequence, U.Iterator.Element == T {
         return createAllPassMatcher() {
             expression, failureMessage in
             failureMessage.postfixMessage = passName
@@ -14,15 +16,15 @@ public func allPass<T,U where U: Sequence, U.Iterator.Element == T>
         }
 }
 
-public func allPass<U,V where U: Sequence, V: Matcher, U.Iterator.Element == V.ValueType>
-    (_ matcher: V) -> NonNilMatcherFunc<U> {
+public func allPass<U,V>
+  (_ matcher: V) -> NonNilMatcherFunc<U> where U: Sequence, V: Matcher, U.Iterator.Element == V.ValueType {
         return createAllPassMatcher() {
             try matcher.matches($0, failureMessage: $1)
         }
 }
 
-private func createAllPassMatcher<T,U where U: Sequence, U.Iterator.Element == T>
-    (_ elementEvaluator:(Expression<T>, FailureMessage) throws -> Bool) -> NonNilMatcherFunc<U> {
+private func createAllPassMatcher<T,U>
+  (_ elementEvaluator:@escaping (Expression<T>, FailureMessage) throws -> Bool) -> NonNilMatcherFunc<U> where U: Sequence, U.Iterator.Element == T {
         return NonNilMatcherFunc { actualExpression, failureMessage in
             failureMessage.actualValue = nil
             if let actualValue = try actualExpression.evaluate() {
@@ -58,7 +60,7 @@ extension NMBObjCMatcher {
             var collectionIsUsable = true
             if let value = actualValue as? NSFastEnumeration {
                 let generator = NSFastEnumerationIterator(value)
-                while let obj:AnyObject = generator.next() {
+                while let obj = generator.next() {
                     if let nsObject = obj as? NSObject {
                         nsObjects.append(nsObject)
                     } else {

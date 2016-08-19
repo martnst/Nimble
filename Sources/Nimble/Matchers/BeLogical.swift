@@ -11,7 +11,7 @@ extension Bool: Boolean {
 extension NSNumber: Boolean {}
 
 
-internal func matcherWithFailureMessage<T>(_ matcher: NonNilMatcherFunc<T>, postprocessor: (FailureMessage) -> Void) -> NonNilMatcherFunc<T> {
+internal func matcherWithFailureMessage<T>(_ matcher: NonNilMatcherFunc<T>, postprocessor: @escaping (FailureMessage) -> Void) -> NonNilMatcherFunc<T> {
     return NonNilMatcherFunc { actualExpression, failureMessage in
         defer { postprocessor(failureMessage) }
         return try matcher.matcher(actualExpression, failureMessage)
